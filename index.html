@@ -1,0 +1,492 @@
+from IPython.display import HTML
+
+html_content = '''
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garçom Digital</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8f5e9;
+            color: #333;
+        }
+     .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        h1, h2, h3 { color: #2e7d32; }
+        header h1 { color: white; }
+        button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        button:hover { background-color: #1b5e20; }
+     .card {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+        }
+     .main-content { width: 100%; max-width: 1200px; }
+     .cliente-input {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+     .cliente-input label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2e7d32;
+        }
+     .cliente-input input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #2e7d32;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+     .menu-carrinho-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+     .menu-section,.carrinho-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+     .categorias {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+     .cat-btn {
+            background: #ccc;
+            color: #666;
+        }
+     .cat-btn.active {
+            background: #2e7d32;
+            color: white;
+        }
+     .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+     .produto {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+     .produto img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+     .produto h3 { margin: 5px 0; font-size: 16px; }
+     .produto p { font-size: 13px; color: #666; margin-bottom: 8px; }
+     .produto.preco {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 10px 0;
+        }
+     .mesa-info {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+     .carrinho-items { min-height: 100px; }
+     .item-carrinho {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+     .item-controles button {
+            padding: 5px 10px;
+            margin: 0 5px;
+        }
+     .carrinho-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #2e7d32;
+        }
+     .total-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+     .total-line.total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+     .forma-pagamento {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+     .opcoes-pagamento {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+     .radio-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            flex: 1;
+        }
+     .radio-label input { margin-right: 8px; }
+     .radio-custom {
+            padding: 10px;
+            border: 2px solid #2e7d32;
+            border-radius: 5px;
+            width: 100%;
+            text-align: center;
+        }
+     .radio-label input:checked +.radio-custom {
+            background: #2e7d32;
+            color: white;
+        }
+     .carrinho-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+     .btn-limpar { background: #d32f2f; }
+     .btn-enviar { background: #25D366; flex: 1; }
+     .pix-area {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
+     .chave-pix {
+            background: white;
+            padding: 8px;
+            border-radius: 5px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        @media (max-width: 600px) {
+         .menu-carrinho-container { flex-direction: column; }
+         .container { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍽️ Garçom Digital</h1>
+        </header>
+
+        <div class="main-content">
+            <div class="cliente-input card">
+                <label>Número da Mesa *</label>
+                <input type="number" id="num-mesa" placeholder="Ex: 12" min="1" max="100">
+                <label>Seu Nome *</label>
+                <input type="text" id="nome-cliente" placeholder="Ex: João Silva">
+                <label>Observações do Pedido</label>
+                <input type="text" id="observacoes" placeholder="Ex: Sem cebola, ponto da carne...">
+            </div>
+
+            <div class="menu-carrinho-container">
+                <div class="menu-section">
+                    <h2>📋 Cardápio</h2>
+                    <div class="categorias">
+                        <button class="cat-btn active" onclick="filtrarCategoria('comidas')">🍔 Comidas</button>
+                        <button class="cat-btn" onclick="filtrarCategoria('bebidas')">🥤 Bebidas</button>
+                        <button class="cat-btn" onclick="filtrarCategoria('sobremesas')">🍰 Sobremesas</button>
+                    </div>
+                    <div class="produtos-grid" id="produtosGrid"></div>
+                </div>
+
+                <div class="carrinho-section">
+                    <h2>🛒 Carrinho</h2>
+                    <div class="mesa-info" id="mesaInfo">Preencha os dados acima</div>
+                    <div class="carrinho-items" id="carrinhoItems"></div>
+                    <div class="carrinho-total">
+                        <div class="total-line">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">R$ 0,00</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Taxa de Serviço (10%):</span>
+                            <span id="taxa">R$ 0,00</span>
+                        </div>
+                        <div class="total-line total">
+                            <span>Total:</span>
+                            <span id="total">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <div class="forma-pagamento">
+                        <h3>💳 Forma de Pagamento</h3>
+                        <div class="opcoes-pagamento">
+                            <label class="radio-label">
+                                <input type="radio" name="pagamento" value="pix" checked onchange="selecionarPagamento('pix')">
+                                <span class="radio-custom">📱 Pix</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="pagamento" value="balcao" onchange="selecionarPagamento('balcao')">
+                                <span class="radio-custom">🏪 Balcão</span>
+                            </label>
+                        </div>
+                        <div class="pix-area" id="pixArea">
+                            <strong>🔑 CHAVE PIX:</strong>
+                            <div class="chave-pix">5581920027412</div>
+                            <button onclick="copiarPix()">📋 Copiar Chave PIX</button>
+                        </div>
+                    </div>
+
+                    <div class="carrinho-buttons">
+                        <button class="btn btn-limpar" onclick="limparCarrinho()">Limpar</button>
+                        <button class="btn btn-enviar" onclick="enviarPedido()">📤 Enviar Pedido</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CHAVE_PIX = '5581920027412';
+        const NUMERO_GARCOM = '5581981212837';
+
+        const produtos = [
+            {id: 1, nome: 'X-Burger', preco: 1800, categoria: 'comidas', desc: 'Pão, carne, queijo, alface, tomate', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400'},
+            {id: 2, nome: 'X-Bacon', preco: 2200, categoria: 'comidas', desc: 'Pão, carne, queijo, bacon, maionese', img: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400'},
+            {id: 3, nome: 'X-Salada', preco: 1900, categoria: 'comidas', desc: 'Pão, carne, queijo, alface, tomate, milho', img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400'},
+            {id: 4, nome: 'Coca-Cola Lata', preco: 600, categoria: 'bebidas', desc: '350ml gelada', img: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=400'},
+            {id: 5, nome: 'Suco Natural', preco: 800, categoria: 'bebidas', desc: 'Laranja, abacaxi ou maracujá 400ml', img: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400'},
+            {id: 6, nome: 'Guaraná Lata', preco: 600, categoria: 'bebidas', desc: '350ml gelado', img: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400'},
+            {id: 7, nome: 'Petit Gateau', preco: 1600, categoria: 'sobremesas', desc: 'Bolo quente + sorvete de creme', img: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400'},
+            {id: 8, nome: 'Brownie', preco: 1200, categoria: 'sobremesas', desc: 'Brownie de chocolate + 1 bola', img: 'https://images.unsplash.com/photo-1607920592512-3a1d33d892a0?w=400'},
+        ];
+
+        let carrinho = {};
+        let categoriaAtual = 'comidas';
+        let formaPagamento = 'pix';
+
+        // INPUTS
+        document.getElementById('num-mesa').addEventListener('input', atualizarMesaInfo);
+        document.getElementById('nome-cliente').addEventListener('input', atualizarMesaInfo);
+
+        function atualizarMesaInfo() {
+            const mesa = document.getElementById('num-mesa').value;
+            const nome = document.getElementById('nome-cliente').value;
+            const info = document.getElementById('mesaInfo');
+
+            if(mesa && nome) {
+                info.textContent = `Mesa ${mesa} - ${nome}`;
+                info.style.color = '#2e7d32';
+            } else if(mesa) {
+                info.textContent = `Mesa ${mesa}`;
+                info.style.color = '#2e7d32';
+            } else {
+                info.textContent = 'Preencha os dados acima';
+                info.style.color = '#999';
+            }
+        }
+
+        // PRODUTOS
+        function carregarProdutos() {
+            const grid = document.getElementById('produtosGrid');
+            const filtrados = produtos.filter(p => p.categoria === categoriaAtual);
+            grid.innerHTML = filtrados.map(p => `
+                <div class="produto">
+                    <img src="${p.img}" alt="${p.nome}">
+                    <h3>${p.nome}</h3>
+                    <p>${p.desc}</p>
+                    <div class="preco">R$ ${(p.preco/100).toFixed(2).replace('.', ',')}</div>
+                    <button onclick="adicionarCarrinho(${p.id})">+ Adicionar</button>
+                </div>
+            `).join('');
+        }
+
+        function filtrarCategoria(cat) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            carregarProdutos();
+        }
+
+        // CARRINHO
+        function adicionarCarrinho(id) {
+            carrinho[id] = (carrinho[id] || 0) + 1;
+            atualizarCarrinho();
+        }
+
+        function alterarQty(id, delta) {
+            carrinho[id] = Math.max(0, (carrinho[id] || 0) + delta);
+            if(carrinho[id] === 0) delete carrinho[id];
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const container = document.getElementById('carrinhoItems');
+            const items = Object.keys(carrinho);
+
+            if(items.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:#999;">Carrinho vazio</p>';
+            } else {
+                container.innerHTML = items.map(id => {
+                    const p = produtos.find(prod => prod.id == id);
+                    return `
+                        <div class="item-carrinho">
+                            <span>${p.nome}</span>
+                            <div class="item-controles">
+                                <button class="btn-qty" onclick="alterarQty(${id}, -1)">-</button>
+                                <span>${carrinho[id]}</span>
+                                <button class="btn-qty" onclick="alterarQty(${id}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let subtotal = 0;
+            Object.keys(carrinho).forEach(id => {
+                const p = produtos.find(prod => prod.id == id);
+                subtotal += p.preco * carrinho[id];
+            });
+            const taxa = Math.round(subtotal * 0.1);
+            const total = subtotal + taxa;
+
+            document.getElementById('subtotal').textContent = `R$ ${(subtotal/100).toFixed(2).replace('.', ',')}`;
+            document.getElementById('taxa').textContent = `R$ ${(taxa/100).toFixed(2).replace('.', ',')}`;
+            document.getElementById('total').textContent = `R$ ${(total/100).toFixed(2).replace('.', ',')}`;
+        }
+
+        function limparCarrinho() {
+            carrinho = {};
+            atualizarCarrinho();
+        }
+
+        // PAGAMENTO
+        function selecionarPagamento(tipo) {
+            formaPagamento = tipo;
+            document.getElementById('pixArea').style.display = tipo === 'pix'? 'block' : 'none';
+        }
+
+        function copiarPix() {
+            navigator.clipboard.writeText(CHAVE_PIX);
+            alert('Chave PIX copiada!');
+        }
+
+        // ENVIAR PEDIDO
+        function enviarPedido() {
+            const mesa = document.getElementById('num-mesa').value;
+            const nome = document.getElementById('nome-cliente').value;
+            const obs = document.getElementById('observacoes').value;
+
+            if(Object.keys(carrinho).length === 0) {
+                alert('Carrinho vazio!');
+                return;
+            }
+            if(!mesa) {
+                alert('Digite o número da mesa!');
+                return;
+            }
+            if(!nome) {
+                alert('Digite seu nome!');
+                return;
+            }
+
+            let msg = `🔔 *NOVO PEDIDO - MESA ${mesa}*\n`;
+            msg += `👤 *Cliente:* ${nome}\n\n`;
+            let subtotal = 0;
+
+            Object.keys(carrinho).forEach(id => {
+                const p = produtos.find(prod => prod.id == id);
+                const qtd = carrinho[id];
+                const sub = p.preco * qtd;
+                subtotal += sub;
+                msg += `• ${qtd}x ${p.nome} - R$ ${(sub/100).toFixed(2).replace('.', ',')}\n`;
+            });
+
+            const taxa = Math.round(subtotal * 0.1);
+            const total = subtotal + taxa;
+
+            msg += `\n💰 *Subtotal: R$ ${(subtotal/100).toFixed(2).replace('.', ',')}*`;
+            msg += `\n💰 *Taxa 10%: R$ ${(taxa/100).toFixed(2).replace('.', ',')}*`;
+            msg += `\n💰 *TOTAL: R$ ${(total/100).toFixed(2).replace('.', ',')}*`;
+
+            if(formaPagamento === 'pix') {
+                msg += `\n\n💳 *Pagamento:* PIX`;
+                msg += `\n🔑 *Chave:* ${CHAVE_PIX}`;
+                msg += `\n\n⚠️ *Enviar comprovante junto*`;
+            } else {
+                msg += `\n\n💳 *Pagamento:* Balcão`;
+            }
+
+            if(obs) msg += `\n\n📝 *Obs:* ${obs}`;
+            msg += `\n\n⏰ ${new Date().toLocaleString('pt-BR')}`;
+
+            window.open(`https://wa.me/${NUMERO_GARCOM}?text=${encodeURIComponent(msg)}`, '_blank');
+
+            alert('Pedido enviado! Confirme no WhatsApp.');
+            limparCarrinho();
+            document.getElementById('num-mesa').value = '';
+            document.getElementById('nome-cliente').value = '';
+            document.getElementById('observacoes').value = '';
+            atualizarMesaInfo();
+        }
+
+        // INICIAR
+        carregarProdutos();
+    </script>
+</body>
+</html>
+'''
+
+display(HTML(html_content))
